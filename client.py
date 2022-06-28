@@ -1,12 +1,13 @@
 import socket
-import thrending
+import threading
 import random
 
-client = socket(socket.AF_INET, socket.SOCK_DGRAM)
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client.bind(("localhost", random.randint(8000, 9000)))
 
-name = input("Enter your name: ")
+name = input("Nickname: ")
 
-def recieve():
+def receive():
     while True:
         try:
             message, _ = client.recvfrom(1024)
@@ -14,7 +15,7 @@ def recieve():
         except:
             pass
 
-t = threading.Thread(target=recieve)
+t = threading.Thread(target=receive)
 t.start()
 
 client.sendto(f"SIGNUP_TAG:{name}".encode(), ('localhost', 9999))
